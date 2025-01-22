@@ -12,6 +12,7 @@ The project aims to simplify the exam reservation process, enhance efficiency, a
 - Coordinator Dashboard: }Create and manage exam reservations, assign invigilators, and handle excuses,change requests.
 - Invigilator Dashboard: View assigned exams and submit excuses.
 - Teacher Dashboard: Request changes to reservations and manage accepted requests.
+- Admin Dashboard: Manage resourses(Course, User, Room, Exam period)
 
 ## Technologies Used:
 - **Backend:** ASP.NET Core MVC
