@@ -1,15 +1,29 @@
+using ExamSchedulingSystem.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); 
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
+app.UseSession();
 
-// Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+   
     app.UseHsts();
 }
 
@@ -23,39 +37,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapControllerRoute(
-    name: "StudentLogin",
-    pattern: "student/login",
-    defaults: new { controller = "Home", action = "StudentLogin" });
 
-app.MapControllerRoute(
-    name: "FacultyLogin",
-    pattern: "faculty/login",
-    defaults: new { controller = "Home", action = "FacultyLogin" });
-
-app.MapControllerRoute(
-    name: "AdminLogin",
-    pattern: "admin/login",
-    defaults: new { controller = "Home", action = "AdminLogin" });
-
-app.MapControllerRoute(
-    name: "RequestPasswordReset",
-    pattern: "forgot-password",
-    defaults: new { controller = "Home", action = "RequestPasswordReset" });
-
-app.MapControllerRoute(
-    name: "VerifyIdentity",
-    pattern: "verify-identity",
-    defaults: new { controller = "Home", action = "VerifyIdentity" });
-
-app.MapControllerRoute(
-    name: "ResetPassword",
-    pattern: "reset-password",
-    defaults: new { controller = "Home", action = "ResetPassword" });
-
-app.MapControllerRoute(
-    name: "SignUp",
-    pattern: "signup",
-    defaults: new { controller = "Home", action = "SignUp" });
 
 app.Run();

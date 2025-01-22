@@ -1,23 +1,30 @@
-﻿@{
+﻿@model ForgotPasswordViewModel
+@{
+    ViewData["HideHeader"] = true;
     ViewData["Title"] = "Verify Your Identity";
 }
 
-<div class="verify-container">
-    <h1>EXAM SCHEDULING SYSTEM</h1>
 
-    <h2>VERIFY YOUR IDENTITY</h2>
-    <p>We’ve sent an email to a***@@gmail.com</p>
 
-    <form asp-action="VerifyIdentity" method="post">
-        <div class="form-group">
-            <label for="code">Enter Code<span class="required">*</span></label>
-            <input type="text" id="code" name="verificationCode" required />
+
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="row w-100">
+        <div class="col-md-6 offset-md-3 d-flex flex-column align-items-center">
+            <h3 class="text-center mb-3">VERIFY YOUR IDENTITY</h3>
+            <p class="text-center mb-4">enter your email to receive reset code</p>
+
+            
+            <form method="post" action="/Home/VerifyIdentity" class="w-100" style="max-width: 400px;">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                    <input asp-for="Email" class="form-control" id="Email" name="Email" required>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">continue </button>
+            </form>
         </div>
-
-        <button type="submit" class="continue-btn">Continue</button>
-    </form>
-
-    <p class="resend">Didn't receive code? <a href="#">Resend</a></p>
+    </div>
 </div>
-
-<link rel="stylesheet" type="text/css" href="~/css/verifyIdentity.css" />
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

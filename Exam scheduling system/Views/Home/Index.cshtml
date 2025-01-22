@@ -1,24 +1,35 @@
 ﻿@{
-    ViewData["Title"] = "Exam Scheduling System";
+    Layout = "~/Views/Shared/NoHeader.cshtml";
 }
-<div class="container text-center">
-   
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In As - Exam Scheduling System</title>
+</head>
+<body style="background-image: url('@Url.Content("~/image/back.jpg")'); background-repeat:no-repeat; background-size:cover; background-position:center;">
 
-    <h2>PRINCE AL-HUSSEIN BIN ABDULLAH II FACULTY FOR INFORMATION TECHNOLOGY</h2>
-    <h1>EXAM SCHEDULING SYSTEM</h1>  
-    <h3>Log in as:</h3>
+    <div class="container-fluid min-vh-100 d-flex align-items-center">
+        <div class="row w-100">
+          
+            <div class="col-md-6 text-start">
+                <h3 class="text-white mt-5 ms-4">Prince Al-hussein Bin Abdullah II Faculty For Information Technology</h3>
+                <h3 class="text-white ms-4" style="margin-top: 2cm;">Exam Scheduling System</h3>
+            </div>
 
-
-    <div class="login-options">
-
-        <div class="login-buttons">
-            <a href="/Home/FacultyLogin" class="btn btn-primary btn-lg">Faculty</a>
-            <a href="/Home/StudentLogin" class="btn btn-primary btn-lg">Student</a>
-            <a href="/Home/AdminLogin" class="btn btn-primary btn-lg">Admin</a>
-            <a href="/Home/Guest" class="btn btn-secondary btn-lg">Enter as Guest</a>
+            <div class="col-md-5 d-flex flex-column align-items-end justify-content-center">
+                <div class="d-flex flex-column align-items-center w-100">
+                    <h3 class="text-white">Log in as:</h3>
+                    <a href="@Url.Action("FacultyLogin", "Home", new { role = "Faculty" })" class="btn btn-primary btn-lg mb-3 w-50">Faculty</a>
+                    <a href="@Url.Action("Login", "Home", new { role = "Student" })" class="btn btn-primary btn-lg mb-3 w-50">Student</a>
+                    <a href="@Url.Action("FacultyLogin", "Home", new { role = "Admin" })" class="btn btn-primary btn-lg mb-3 w-50">Admin</a>
+                    <a href="@Url.Action("Guest", "Home", new { role = "Guest" })" class="btn btn-secondary btn-lg mb-3 w-50">Enter as Guest</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<link rel="stylesheet" type="text/css" href="~/css/styles.css" />
+</body>
+</html>

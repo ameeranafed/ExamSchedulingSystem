@@ -1,4 +1,4 @@
-namespace Exam_scheduling_system.Models
+namespace ExamSchedulingSystem.Models
 {
     public class ErrorViewModel
     {

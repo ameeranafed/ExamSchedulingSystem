@@ -1,57 +1,141 @@
-﻿@{
+﻿@model ExamSchedulingSystem.Models.User
+
+@{
+    ViewData["HideHeader"] = true;
     ViewData["Title"] = "Sign Up";
+    var role = ViewBag.Role as string;
 }
 
-<div class="signup-container">
-    <h1>EXAM SCHEDULING SYSTEM</h1>
 
-    <div class="signup-content">
-        <!-- Left side: Image -->
-        <div class="signup-image">
-            <img src="@Url.Content("~/image/login.jpg   ")" alt="" Sign Up Image"" />
+
+
+
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="row w-100">
+    
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <img src="/image/login.jpg" alt="Sign Up Image" class="img-fluid">
         </div>
 
-        <!-- Right side: Form -->
-        <div class="signup-form">
-            <h2>SIGN UP</h2>
+     
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div class="card p-4 shadow-lg w-100" style="max-width: 400px;">
+                <h3 class="text-center mb-4">Sign Up as @role</h3>
 
-            <form asp-action="SignUp" method="post">
-                <div class="form-group">
-                    <label for="name">Name<span class="required">*</span></label>
-                    <input type="text" id="name" name="name" required />
-                </div>
+                <form asp-action="SignUp" method="post">
+                   
+                    <input type="hidden" name="role" value="@role" />
 
-                <div class="form-group">
-                    <label for="email">Email<span class="required">*</span></label>
-                    <input type="email" id="email" name="email" required />
-                </div>
+                  
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Name <span class="text-danger">*</span></label>
+                        <input asp-for="Name" class="form-control" required />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
 
-                <div class="form-group">
-                    <label for="id">ID<span class="required">*</span></label>
-                    <input type="text" id="id" name="id" required />
-                </div>
+                  
+                    <div class="mb-3">
+                        <label asp-for="UserId" class="form-label">ID <span class="text-danger">*</span></label>
+                        <input asp-for="UserId" class="form-control" id="UserId" required />
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                        <span id="userIdError" class="text-danger" style="display: none;">This ID already exists.</span>
+                    </div>
 
-                <div class="form-group">
-                    <label for="password">Password<span class="required">*</span></label>
-                    <input type="password" id="password" name="password" required />
-                    <span class="password-eye" onclick="togglePasswordVisibility()">👁</span>
-                </div>
+                 
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email <span class="text-danger">*</span></label>
+                        <input asp-for="Email" class="form-control" id="Email" type="email" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <span id="emailError" class="text-danger" style="display: none;">This email already exists.</span>
+                        <span id="emailFormatError" class="text-danger" style="display: none;">Invalid email format. Must be like *******@@std.hu.edu.jo</span>
+                    </div>
 
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password<span class="required">*</span></label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required />
-                    <span class="password-eye" onclick="togglePasswordVisibility()">👁</span>
-                </div>
+                   
+                    <div class="mb-3 position-relative">
+                        <label asp-for="Password" class="form-label">Password <span class="text-danger">*</span></label>
+                        <input asp-for="Password" class="form-control" type="password" id="Password" required />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
 
-                <button type="submit" class="signup-btn">Sign Up</button>
-            </form>
+                   
+                    <div class="mb-3 position-relative">
+                        <label for="confirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" id="ConfirmPassword" name="confirmPassword" required />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <span id="passwordError" class="text-danger" style="display: none;">Passwords do not match.</span>
+                    </div>
 
-            @if (!string.IsNullOrEmpty(ViewData["ErrorMessage"] as string))
-            {
-                <div class="error-message">@ViewData["ErrorMessage"]</div>
-            }
+                    
+                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                </form>
+
+            </div>
         </div>
     </div>
 </div>
+@section Scripts {
+    
+    <partial name="_ValidationScriptsPartial" />
 
-<link rel="stylesheet" type="text/css" href="~/css/signup.css" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const passwordField = document.getElementById("Password");
+            const confirmPasswordField = document.getElementById("ConfirmPassword");
+            const passwordError = document.getElementById("passwordError");
+
+            function validatePasswords() {
+                if (passwordField.value !== confirmPasswordField.value) {
+                    passwordError.style.display = "block"; 
+                } else {
+                    passwordError.style.display = "none"; 
+                }
+            }
+
+           
+            passwordField.addEventListener("input", validatePasswords);
+            confirmPasswordField.addEventListener("input", validatePasswords);
+
+            const userIdField = document.getElementById("UserId");
+            const emailField = document.getElementById("Email");
+            const userIdError = document.getElementById("userIdError");
+            const emailError = document.getElementById("emailError");
+
+           
+            function checkUniqueness(type, value, errorElement) {
+                if (value) {
+                    fetch(`/Account/CheckUniqueness?type=${type}&value=${value}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.exists) {
+                                errorElement.style.display = "block";
+                            } else {
+                                errorElement.style.display = "none";
+                            }
+                        })
+                        .catch(err => console.error("Error checking uniqueness:", err));
+                }
+            }
+
+            userIdField.addEventListener("input", function () {
+                checkUniqueness("UserId", userIdField.value, userIdError);
+            });
+
+            emailField.addEventListener("input", function () {
+                checkUniqueness("Email", emailField.value, emailError);
+            });
+            const emailFormatError = document.getElementById("emailFormatError");
+
+          
+            const emailRegex = /^[0-9]+@@std\.hu\.edu\.jo$/;
+
+         
+            emailField.addEventListener("input", function () {
+                if (!emailRegex.test(emailField.value)) {
+                    emailFormatError.style.display = "block"; 
+                } else {
+                    emailFormatError.style.display = "none"; 
+                }
+            });
+        });
+    </script>
+}
